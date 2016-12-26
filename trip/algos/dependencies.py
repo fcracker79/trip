@@ -43,7 +43,9 @@ def _merge(v1: typing.List[domain.VersionNode], v2: typing.List[domain.VersionNo
         if k1 in v2_by_name and v1_by_name[k1] != v2_by_name[k1]:
             return []
 
-    return v1 + [x for x in v2 if x.version_name not in v1_by_name]
+    return v1 + [x for x in v2 if x.version_name not in v1_by_name] \
+        if len(v1) > len(v2) \
+        else v2 + [x for x in v1 if x.version_name not in v2_by_name]
 
 
 def _incr(deps_info: typing.List[typing.Dict], index: int=0) -> None:

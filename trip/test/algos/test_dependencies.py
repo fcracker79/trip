@@ -45,5 +45,7 @@ class TestDependencies(unittest.TestCase):
             'lib_c': [lib_c_3_0_0]
         }
         final_dependencies = dependencies.get_dependencies(requirements)
+        self.assertEqual(1, len(final_dependencies))
+        self.assertEqual([lib_a_1_0_0, lib_b_2_0_0, lib_c_3_0_0], final_dependencies[0])
         for x in final_dependencies:
             print([y.version_name + '-' + y.version_number for y in x])
