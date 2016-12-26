@@ -1,2 +1,2 @@
 # trip
-Trip is a PIP dependencies tree
+Trip is a Python 3 dependencies tree analyzer.
