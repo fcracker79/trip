@@ -40,10 +40,10 @@ def _merge(v1: typing.List[domain.VersionNode], v2: typing.List[domain.VersionNo
     v2_by_name = {x.version_name: x for x in v2}
 
     for k1 in v1_by_name.keys():
-        if v1_by_name[k1] != v2_by_name[k1]:
+        if k1 in v2_by_name and v1_by_name[k1] != v2_by_name[k1]:
             return []
 
-    return v1 + [x for x in v2 if x.version_number not in v1_by_name]
+    return v1 + [x for x in v2 if x.version_name not in v1_by_name]
 
 
 def _incr(deps_info: typing.List[typing.Dict], index: int=0) -> None:
@@ -71,7 +71,9 @@ def _get_versions_by_name(node: domain.VersionNode, result: typing.Dict[str, typ
 def _get_versions(nodes: typing.List[domain.VersionNode]) -> typing.List[typing.List[domain.VersionNode]]:
     result = []
     for node in nodes:
-        result += _get_versions_for_node(node, [], [])
+        cur_result = _get_versions_for_node(node, [], [])
+        if cur_result:
+            result += cur_result
     return result
 
 
@@ -84,5 +86,6 @@ def _get_versions_for_node(
         for child in node.dependencies:
             _get_versions_for_node(child, result, call_stack)
     else:
-        result.append(call_stack)
+        result.append(call_stack.copy())
     call_stack.pop()
+    return result
