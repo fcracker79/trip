@@ -3,7 +3,8 @@ import typing
 from trip import domain
 
 
-def get_dependencies(deps: typing.Dict[str, typing.List[domain.VersionNode]]) -> typing.List[typing.List[domain.VersionNode]]:
+def get_dependencies(deps: typing.Dict[str, typing.List[domain.VersionNode]]) \
+        -> typing.List[typing.List[domain.VersionNode]]:
     deps_info = []
     versions_by_name = {}
     for version_name, cur_deps in deps.items():
@@ -17,15 +18,18 @@ def get_dependencies(deps: typing.Dict[str, typing.List[domain.VersionNode]]) ->
         })
 
     result = []
-    while not _finished(deps_info):
+    while True:
         final_version = None
         for x in deps_info:
             final_version = _merge(final_version, x['versions'][x['counter']])
             if not final_version:
                 break
-        _incr(deps_info)
         if final_version:
             result.append(final_version)
+
+        if _finished(deps_info):
+            break
+        _incr(deps_info)
 
     return result
 
